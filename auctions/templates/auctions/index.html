@@ -1,0 +1,36 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>{{ headline }}</h2>
+
+    {% for listing in listings %}
+        <div class="row border d-flex mt-4 mx-1 p-4" >
+            <div class="col-12 col-md-3 text-center my-auto" > 
+                <img 
+                    style="max-width: 60%; max-height: 60%;"  
+                    src="{% if listing.img_url %}{{ listing.img_url }}{%else%}https://www.samsung.com/etc/designs/smg/global/imgs/support/cont/NO_IMG_600x600.png{% endif %}"
+                />
+            </div>
+            <div class="col-12 col-md-9 d-flex flex-column w-100 mt-4 mt-md-0">
+                <a href="{% url 'listing' listing.id %}">
+                    <h2 class="h4">{{ listing.title }}</h2>
+                </a>
+                <strong>Price: ${{ listing.max_bid }}</strong>
+                <div>{{ listing.description|truncatechars:100 }}</div>
+                <br>
+                <div class="text-muted small">Created: {{ listing.created_at }}</div>
+                <div class="text-muted small">Category: 
+                    {% if not listing.category %}
+                        No Category Listed
+                    {% else %}
+                        <a href="{% url 'category' listing.category %}">
+                            {{ listing.category }}
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div>No active listings for now!</div>
+    {% endfor %}
+{% endblock %}
